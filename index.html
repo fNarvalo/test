@@ -12,21 +12,35 @@
 
     <script src="data.json"></script>
     <script>
-        function search() {
-            const searchValue = document.getElementById('searchInput').value.toLowerCase();
-            const results = data.filter(item => 
-                item.title.toLowerCase().includes(searchValue) ||
-                item._dkr_formula.toLowerCase().includes(searchValue) ||
-                item._dkr_cas.toLowerCase().includes(searchValue));
+    let data = []; // Initialize an empty array to hold the data
 
-            const resultElement = document.getElementById('result');
-            if (results.length > 0) {
-                const resultText = results.map(item => item._dkr_filtroTipodifiltro_p).join(', ');
-                resultElement.textContent = `Result: ${resultText}`;
-            } else {
-                resultElement.textContent = 'Sostanza inquinante non in elenco';
-            }
-        }
-    </script>
+    // Use fetch to load the JSON data
+    fetch('data.json')
+        .then(response => response.json())
+        .then(jsonData => {
+            data = jsonData; // Store the loaded data for later use
+        })
+        .catch(error => {
+            console.error('Error loading the JSON data:', error);
+            document.getElementById('result').textContent = 'Error loading data.';
+        });
+
+    function search() {
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const results = data.filter(item =>
+            item.title.toLowerCase().includes(searchValue) ||
+            item._dkr_formula.toLowerCase().includes(searchValue) ||
+            item._dkr_cas.toLowerCase().includes(searchValue));
+
+        const resultElement = document.getElementById('result');
+        if (results.length > 0) {
+            const resultText = results.map(item => item.codice).join(', ');
+            resultElement.textContent = `Result: ${resultText}`;
+        } else {
+            resultElement.textContent = 'Sostanza inquinante non in elenco';
+}
+}
+</script>
+
 </body>
 </html>
